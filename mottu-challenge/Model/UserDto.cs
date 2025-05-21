@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace mottu_challenge.Model
@@ -7,12 +8,21 @@ namespace mottu_challenge.Model
     {
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; } 
 
-        [Required(ErrorMessage = "Usuário precisa ser preenchido")]
+        [Required(ErrorMessage = "Username precisa ser preenchido")]
         [MaxLength(20, ErrorMessage = "Precisa ter no máximo 20 caracteres")]
         public String Username { get; set; }
-        [Required(ErrorMessage = "")]
 
+        [Required(ErrorMessage = "Email precisa ser preenchido")]
+        [EmailAddress]
+        public String Email { get; set; }
+
+        [Required(ErrorMessage = "Senha precisa ser preenchida")]
+        [MinLength(6, ErrorMessage = "Senha precisa ter no mínimo 6 caracteres")]
+        public String Password { get; set; }
+
+        
     }
 }
