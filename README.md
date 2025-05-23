@@ -39,10 +39,6 @@ Principais funcionalidades:
    {
      "ConnectionStrings": {
        "DefaultConnection": "User Id=seu-id;Password=sua-senha;Data Source=//oracle.fiap.com.br:1521/ORCL"
-     },
-     "SendGrid": {
-       "ApiKey": "SUA_SENDGRID_API_KEY",
-       "Sender": "seuemailverificado@exemplo.com"
      }
    }
    ```
@@ -69,7 +65,7 @@ Principais funcionalidades:
 
 6. **Acesse o Swagger UI**:
 
-   Abra no navegador: `https://localhost:5001/swagger`
+   Abra no navegador: `https://localhost:7008/swagger`
 
 ---
 
@@ -92,7 +88,7 @@ Esta seção detalha cada endpoint disponível para operações com **Usuários*
 
 ```http
 POST /api/user/recuperar-senha?paraEmail=usuario@exemplo.com HTTP/1.1
-Host: localhost:5001
+Host: localhost:7008
 ```
 
 ### Papéis (`RoleController`)
@@ -114,7 +110,7 @@ Endpoints para gerenciamento de **Papéis (Roles)**.
 A documentação interativa está disponível em:
 
 ```
-https://localhost:5001/swagger
+https://localhost:7008/swagger
 ```
 
 Inclui exemplos de requisição e resposta para todos os endpoints.
