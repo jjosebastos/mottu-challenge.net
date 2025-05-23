@@ -4,12 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace mottu_challenge.Model
 {
-    public class UserDto
+    public class User
     {
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } 
+        public int IdUser { get; set; } 
 
         [Required(ErrorMessage = "Username precisa ser preenchido")]
         [MaxLength(20, ErrorMessage = "Precisa ter no máximo 20 caracteres")]
@@ -23,6 +23,12 @@ namespace mottu_challenge.Model
         [MinLength(6, ErrorMessage = "Senha precisa ter no mínimo 6 caracteres")]
         public String Password { get; set; }
 
-        
+
+        public String FlagAtivo { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; }
+
     }
 }

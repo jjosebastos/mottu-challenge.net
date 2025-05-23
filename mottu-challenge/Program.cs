@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using mottu_challenge.Connection;
+using mottu_challenge.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseOracle(builder.Configuration.GetConnectionString("DefaultConnection")));
