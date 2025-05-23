@@ -65,7 +65,7 @@ Principais funcionalidades:
 
 6. **Acesse o Swagger UI**:
 
-   Abra no navegador: `https://localhost:7008/swagger`
+   Abra no navegador: `https://localhost:7088/swagger`
 
 ---
 
@@ -88,7 +88,7 @@ Esta seção detalha cada endpoint disponível para operações com **Usuários*
 
 ```http
 POST /api/user/recuperar-senha?paraEmail=usuario@exemplo.com HTTP/1.1
-Host: localhost:7008
+Host: localhost:7088
 ```
 
 ### Papéis (`RoleController`)
@@ -110,7 +110,7 @@ Endpoints para gerenciamento de **Papéis (Roles)**.
 A documentação interativa está disponível em:
 
 ```
-https://localhost:7008/swagger
+https://localhost:7088/swagger
 ```
 
 Inclui exemplos de requisição e resposta para todos os endpoints.
