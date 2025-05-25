@@ -100,7 +100,7 @@ Nesta disciplina, vamos desenvolver uma API RESTful desenvolvida com **ASP.NET C
 | **POST**   | `/api/user`        | Body JSON: `UserRequest`             | `201 Created` + `UserResponse`        |
 | **PUT**    | `/api/user/{id}`   | PathParam: `id`, Body JSON: `UserRequest` | `200 OK` + `UserResponse`        |
 | **DELETE** | `/api/user/{id}`   | PathParam: `id`                      | `204 No Content`                      |
-
+| **GET**    | `/api/user/by-role`    | QueryParam: `roleId` (ex: `?roleId=1`) | `200 OK` + lista de `UserResponse`|
 ---
 
 ### Papéis (`RoleController`)
@@ -112,7 +112,7 @@ Nesta disciplina, vamos desenvolver uma API RESTful desenvolvida com **ASP.NET C
 | **POST**   | `/api/role`            | Body JSON: `RoleRequest`             | `201 Created` + `RoleResponse`               |
 | **PUT**    | `/api/role/{id}`       | PathParam: `id`, Body JSON: `RoleRequest` | `200 OK` + `RoleResponse`              |
 | **DELETE** | `/api/role/{id}`       | PathParam: `id`                      | `204 No Content`                             |
-| **GET**    | `/api/role/by-role`    | QueryParam: `roleId` (ex: `?roleId=1`) | `200 OK` + lista de `UserResponse`          |
+
 
 
 ## Documentação (Swagger)
