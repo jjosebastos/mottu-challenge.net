@@ -56,11 +56,13 @@ Principais funcionalidades:
    }
    ```
 
-3. **Instale as dependências**:
+3. **Instale as dependências necessárias**:
 
-   ```bash
-   dotnet restore
-   ```
+🔧 *Abra o Visual Studio e navegue até:*  
+**`Tools` > `NuGet Package Manager` > `Manage NuGet Packages for Solution...`**
+
+📦 *Em seguida, procure e instale as bibliotecas listadas neste README, garantindo que estejam atribuídas ao(s) projeto(s) correto(s).*
+
 
 4. **Crie e aplique as migrations**:
 
