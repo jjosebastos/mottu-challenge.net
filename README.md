@@ -1,13 +1,18 @@
 # mottu-challenge.net 💡
 
+## Membros do Projeto 👨‍💻
+
+- Nicolas Dobbeck Mendes  
+- José Bezerra Bastos Neto  
+- Thiago Henry Dias
+
 ## Descrição do Projeto 📃
 
-API RESTful desenvolvida com **ASP.NET Core**, conectada a um banco de dados **Oracle** via **Entity Framework Core**. Oferece operações CRUD para **Usuários** e **Papéis (Roles)**, além de um endpoint de recuperação de senha usando **SendGrid**.
+API RESTful desenvolvida com **ASP.NET Core**, conectada a um banco de dados **Oracle** via **Entity Framework Core**. Oferece operações CRUD para **Usuários** e **Papéis (Roles)**, com documentação interativa via Swagger.
 
 Principais funcionalidades:
 
 * CRUD completo para **Usuários** e **Papéis**
-* Endpoint de recuperação de senha (`recuperar-senha`) que envia e-mails via SendGrid
 * Documentação interativa com **Swagger**
 * Configuração do banco de dados usando **EF Core Migrations**
 
@@ -19,8 +24,16 @@ Principais funcionalidades:
 * ASP.NET Core Web API
 * Entity Framework Core (`Oracle.EntityFrameworkCore`)
 * AutoMapper
-* SendGrid (serviço de e-mail)
 * Swashbuckle.AspNetCore (Swagger)
+
+### Pacotes NuGet Instalados
+
+- AutoMapper.Extensions.Microsoft.DependencyInjection
+- Microsoft.EntityFrameworkCore
+- Microsoft.EntityFrameworkCore.Design
+- Microsoft.EntityFrameworkCore.Tools
+- Oracle.EntityFrameworkCore
+- Swashbuckle.AspNetCore
 
 ---
 
@@ -73,27 +86,15 @@ Principais funcionalidades:
 
 ### Usuários (`UserController`)
 
-Esta seção detalha cada endpoint disponível para operações com **Usuários**, incluindo método HTTP, rota, parâmetros de entrada e possíveis respostas.
-
-| Método     | Rota                        | Parâmetros / Body                    | Resposta                              |
-| ---------- | --------------------------- | ------------------------------------ | ------------------------------------- |
-| **GET**    | `/api/user`                 | —                                    | `200 OK` + lista de Usuários          |
-| **GET**    | `/api/user/{id}`            | PathParam: `id`                      | `200 OK` + Usuário ou `404 Not Found` |
-| **POST**   | `/api/user`                 | JSON: `UserRequest`                  | `201 Created` + `UserResponse`        |
-| **PUT**    | `/api/user/{id}`            | PathParam: `id`, JSON: `UserRequest` | `200 OK` + `UserResponse`             |
-| **DELETE** | `/api/user/{id}`            | PathParam: `id`                      | `204 No Content`                      |
-| **POST**   | `/api/user/recuperar-senha` | QueryParam: `paraEmail`              | `200 OK` / `400 Bad Request`          |
-
-**Exemplo de requisição**:
-
-```http
-POST /api/user/recuperar-senha?paraEmail=usuario@exemplo.com HTTP/1.1
-Host: localhost:7088
-```
+| Método     | Rota             | Parâmetros / Body                    | Resposta                              |
+| ---------- | ---------------- | ------------------------------------ | ------------------------------------- |
+| **GET**    | `/api/user`      | —                                    | `200 OK` + lista de Usuários          |
+| **GET**    | `/api/user/{id}` | PathParam: `id`                      | `200 OK` + Usuário ou `404 Not Found` |
+| **POST**   | `/api/user`      | JSON: `UserRequest`                  | `201 Created` + `UserResponse`        |
+| **PUT**    | `/api/user/{id}` | PathParam: `id`, JSON: `UserRequest` | `200 OK` + `UserResponse`             |
+| **DELETE** | `/api/user/{id}` | PathParam: `id`                      | `204 No Content`                      |
 
 ### Papéis (`RoleController`)
-
-Endpoints para gerenciamento de **Papéis (Roles)**.
 
 | Método     | Rota             | Parâmetros / Body                    | Resposta                                     |
 | ---------- | ---------------- | ------------------------------------ | -------------------------------------------- |
@@ -120,6 +121,8 @@ Inclui exemplos de requisição e resposta para todos os endpoints.
 ## Observações
 
 * **Autenticação/Tokens**: JWT não está implementado neste sprint; considere proteger endpoints críticos em sprints futuros.
-* **Variáveis de ambiente**: em produção, use `User Secrets` ou variáveis de ambiente para armazenar `ConnectionStrings` e `SendGrid:ApiKey`.
+* **Variáveis de ambiente**: em produção, use `User Secrets` ou variáveis de ambiente para armazenar `ConnectionStrings`.
 * **Esquema do banco de dados**: gerado via migrations (tabelas `Users`, `Roles`).
+
+---
 
