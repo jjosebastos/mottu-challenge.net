@@ -65,16 +65,13 @@ Principais funcionalidades:
 4. **Crie e aplique as migrations**:
 
    ```bash
-   dotnet tool install --global dotnet-ef
-   dotnet ef migrations add InitialCreate
-   dotnet ef database update
+   PM> Add-Migration InitialCreate
+   PM> Update-Database
    ```
 
 5. **Execute a aplicação**:
 
-   ```bash
-   dotnet run
-   ```
+   *(No Visual Studio, pressione F5 ou Ctrl + F5, ou clique em "Start")*
 
 6. **Acesse o Swagger UI**:
 
