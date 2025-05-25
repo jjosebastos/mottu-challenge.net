@@ -24,7 +24,10 @@ namespace mottu_challenge.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserResponse>>> Get()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users
+                    .Where(u => u.FlagAtivo == "S")
+                    .OrderBy(u => u.IdUser)
+                    .ToListAsync();
             var usersResponse = _mapper.Map<IEnumerable<UserResponse>>(users);
             return Ok(usersResponse);
         }
@@ -50,10 +53,7 @@ namespace mottu_challenge.Controllers
             
             var user = _mapper.Map<User>(userRequest);
             user.Role = roleFound;
-            if (string.IsNullOrWhiteSpace(user.FlagAtivo))
-            {
-                user.FlagAtivo = "S";
-            }
+            user.FlagAtivo = "S";
             user.CreatedAt = DateTime.UtcNow;
 
             _context.Users.Add(user);
@@ -66,19 +66,17 @@ namespace mottu_challenge.Controllers
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, UserRequest userRequest)
-        {;
-         
+        {
             var userFound = await _context.Users.FindAsync(id);
             var roleFound = await _context.Roles.FindAsync(userRequest.RoleId);
 
             if (userFound == null) return NotFound();
             if (roleFound == null) return BadRequest();
 
-            var user = _mapper.Map<User>(userRequest);
-            _context.Entry(user).State = EntityState.Modified;
+            _mapper.Map(userRequest, userFound);
             await _context.SaveChangesAsync();
-            var userResponse = _mapper.Map<UserResponse>(user);
-            return Ok(userResponse);
+            var updatedUser = _mapper.Map<UserResponse>(userFound);
+            return Ok(updatedUser);
         }
 
         [HttpDelete("{id}")]

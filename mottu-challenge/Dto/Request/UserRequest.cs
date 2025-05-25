@@ -9,8 +9,6 @@ namespace mottu_challenge.Dto.Request
         public String Username { get; set; }
         public String Email { get; set; }
         public String Password { get; set; }
-        public String FlagAtivo { get; set; }
-        public DateTime CreatedAt { get; set; }
         public int RoleId { get; set; }
 
     }

@@ -32,7 +32,7 @@ namespace mottu_challenge.Controllers
             if (roles == null) return NotFound();
 
             var rolesReponse = _mapper.Map<IEnumerable<RoleResponse>>(roles);
-            return Ok(roles);
+            return Ok(rolesReponse);
         }
 
         [HttpGet("{id}")]
@@ -44,7 +44,7 @@ namespace mottu_challenge.Controllers
             if (roleFound == null) return NotFound();
 
             var roleResponse = _mapper.Map<RoleResponse>(roleFound);
-            return Ok(roleFound);
+            return Ok(roleResponse);
         }
 
         [HttpPost]
@@ -52,6 +52,8 @@ namespace mottu_challenge.Controllers
         {
             var role = _mapper.Map<Role>(roleRequest);
             _context.Roles.Add(role);
+            role.FlagAtivo = "S";
+            role.CreatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             var roleResponse = _mapper.Map<RoleResponse>(role);
             return CreatedAtAction(nameof(GetById), new {id = roleResponse.IdRole}, roleResponse);
@@ -63,11 +65,12 @@ namespace mottu_challenge.Controllers
             var roleFound = await _context.Roles.FindAsync(id);
             if (roleFound == null) return NotFound();
 
-            var role = _mapper.Map<Role>(roleRequest);
-            _context.Entry(role).State = EntityState.Modified;
+            _mapper.Map(roleRequest, roleFound);
+
             await _context.SaveChangesAsync();
-            var updatedRole = _mapper.Map<RoleResponse>(role);
-            return Ok(role);
+
+            var updatedRole = _mapper.Map<RoleResponse>(roleFound);
+            return Ok(updatedRole);
         }
 
         [HttpDelete("{id}")]
