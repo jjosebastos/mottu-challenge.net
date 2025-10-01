@@ -1,4 +1,6 @@
-﻿namespace mottu_challenge.Dto.Response
+﻿using mottu_challenge.Dto.Shared;
+
+namespace mottu_challenge.Dto.Response
 {
     public class RoleResponse
     {
@@ -7,5 +9,6 @@
         public string RoleDescription { get; set; } = string.Empty;
         public string FlagAtivo { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
+        public List<LinkDto> Links { get; set; } = new List<LinkDto>();
     }
 }

@@ -10,6 +10,7 @@ namespace mottu_challenge.Connection
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Motorcycle> Motorcycles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

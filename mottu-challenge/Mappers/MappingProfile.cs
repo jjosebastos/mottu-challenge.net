@@ -13,7 +13,8 @@ namespace mottu_challenge.Mappers
             CreateMap<Role, RoleResponse>();
             CreateMap<UserRequest, User>();
             CreateMap<RoleRequest, Role>();
-
+            CreateMap<Motorcycle, MotorcycleResponse>();
+            CreateMap<MotorcycleRequest, Motorcycle>();
         }
     
     
