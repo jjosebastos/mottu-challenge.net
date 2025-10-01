@@ -1,11 +1,11 @@
+# Mottu Challenge API - .NET 💡
 
-# mottu-challenge.net 💡
+API RESTful desenvolvida em .NET 8 como parte do desafio técnico da Mottu. A API implementa a fundação de um sistema de gerenciamento de frota, incluindo o controle de Motos, Usuários e Perfis de Acesso.
 
 ## Membros do Projeto 👨‍💻
-
-- Nicolas Dobbeck Mendes  
-- José Bezerra Bastos Neto  
-- Thiago Henry Dias
+* Nicolas Dobbeck Mendes
+* José Bezerra Bastos Neto
+* Thiago Henry Dias
 
 ## Descrição do Projeto 📃
 
@@ -14,123 +14,106 @@ Nossa solução oferece uma visão clara e dinâmica da distribuição e do stat
 A implementação deste sistema representa um avanço significativo para a Mottu, trazendo benefícios tangíveis que impactam diretamente a eficiência e a economia da operação. A eficiência operacional é aprimorada substancialmente, pois o acesso rápido à localização e ao status das motos elimina a necessidade de buscas manuais, agilizando processos como a retirada de veículos e a organização de manutenções. Isso se traduz em uma redução de custos notável, otimizando recursos e respondendo dinamicamente às demandas do mercado.<br><br>
 Este projeto vai muito além de um simples sistema de rastreamento; ele é um passo fundamental na evolução da gestão de frotas da Mottu. Ao oferecer uma visão clara e em tempo real de seus ativos, nossa solução capacita a empresa a operar com uma eficiência sem precedentes. Acreditamos que essa capacidade de monitoramento inteligente não só aprimora as operações diárias, mas também abre portas para inovações futuras, contribuindo significativamente para um cenário de mobilidade urbana mais conectado, seguro e eficiente. Com este projeto, a Mottu está pavimentando o caminho para um futuro onde a logística de frotas é mais inteligente e responsiva.
 
-Nesta disciplina, vamos desenvolver uma API RESTful desenvolvida com **ASP.NET Core**, conectada a um banco de dados **Oracle** via **Entity Framework Core**. Oferece operações CRUD para **Usuários** e **Papéis (Roles)**, com documentação interativa via Swagger.
+## Justificativa da Arquitetura
 
-### Principais funcionalidades:
+A arquitetura escolhida para este projeto foi a **API Web ASP.NET Core**, utilizando um design que separa as responsabilidades em diferentes camadas, promovendo um código mais limpo e de fácil manutenção.
 
-* CRUD completo para **Usuários** e **Papéis**
-* Consulta de usuários por papel (`GET /api/role/by-role`)
-* Documentação interativa com **Swagger**
-* Configuração do banco de dados usando **EF Core Migrations**
+* **.NET 8 e C#:** Escolhidos por sua performance, ecossistema robusto e ferramentas de desenvolvimento modernas.
+* **Entity Framework Core (EF Core):** Utilizado como ORM para abstrair o acesso ao banco de dados Oracle, permitindo um desenvolvimento rápido e seguro da camada de dados através do padrão Code-First e Migrations.
+* **Padrão de DTOs (Data Transfer Objects):** Foram criados objetos específicos para as requisições (`Request`) e respostas (`Response`) da API. Isso garante que a API não exponha os modelos internos do banco de dados, aumentando a segurança e permitindo que a API evolua de forma independente.
+* **AutoMapper:** Ferramenta utilizada para automatizar a conversão entre as entidades do banco e os DTOs, reduzindo código repetitivo.
+* **Boas Práticas REST:** A API foi desenvolvida seguindo princípios REST, incluindo o uso correto de verbos HTTP, status codes (`200`, `201`, `204`, `404`), implementação de **Paginação** para listagens e **HATEOAS** para tornar a API mais "descobrível".
+* **Swagger (OpenAPI):** A documentação da API foi gerada a partir de comentários XML no código, garantindo que a documentação esteja sempre sincronizada com os endpoints e inclua exemplos de uso.
+* **Testes Unitários (xUnit):** Foi criado um projeto de testes separado para garantir a qualidade e o funcionamento correto da lógica de negócio dos controllers, utilizando um banco de dados em memória para isolamento e velocidade.
 
----
-
-## Tecnologias e Pacotes
-
-* .NET 8.0 LTS
+## Tecnologias Utilizadas
+* .NET 8
 * ASP.NET Core Web API
-* Entity Framework Core (`Oracle.EntityFrameworkCore`)
+* Entity Framework Core
+* Oracle Provider para EF Core
 * AutoMapper
 * Swashbuckle.AspNetCore (Swagger)
+* xUnit (Framework de Teste)
+* Moq (Biblioteca de Mock)
 
-### Pacotes NuGet Instalados
+## Instruções de Execução
 
-- AutoMapper.Extensions.Microsoft.DependencyInjection  
-- Microsoft.EntityFrameworkCore  
-- Microsoft.EntityFrameworkCore.Design  
-- Microsoft.EntityFrameworkCore.Tools  
-- Oracle.EntityFrameworkCore  
-- Swashbuckle.AspNetCore  
+1.  **Clonar o Repositório**
+    ```bash
+    git clone https://github.com/jjosebastos/mottu-challenge.net.git
+    cd mottu-challenge.net
+    ```
 
----
+2.  **Configurar a Conexão com o Banco**
+    * No arquivo `mottu-challenge/appsettings.json`, altere a `ConnectionString` "DefaultConnection" com as suas credenciais do banco de dados Oracle.
+    ```json
+    "ConnectionStrings": {
+      "DefaultConnection": "User Id=SEU_ID;Password=SUA_SENHA;Data Source=//oracle.fiap.com.br:1521/ORCL"
+    }
+    ```
 
-## Configuração do Ambiente
+3.  **Aplicar as Migrations do Banco de Dados**
+    * Abra um terminal na pasta do projeto (ex: `.../mottu-challenge.net/mottu-challenge/`).
+    * Execute o comando abaixo para criar/atualizar as tabelas:
+    ```bash
+    dotnet ef database update
+    ```
 
-1. **Clone o repositório**:
+4.  **Executar a Aplicação**
+    * Navegue de volta para a pasta da solução (ex: `.../mottu-challenge.net/`).
+    * No terminal, execute:
+    ```bash
+    dotnet run
+    ```
+    * A API estará rodando. As URLs (incluindo a porta) serão exibidas no terminal.
 
-   ```bash
-   git clone https://github.com/seu-usuario/mottu-challenge.net.git
-   cd mottu-challenge.net
-   ```
-
-2. **Configure o `appsettings.json`**:
-
-   ```json
-   {
-     "ConnectionStrings": {
-       "DefaultConnection": "User Id=seu-id;Password=sua-senha;Data Source=//oracle.fiap.com.br:1521/ORCL"
-     }
-   }
-   ```
-
-3. **Instale as dependências NuGet**:
-
-   Abra o Visual Studio e navegue até:  
-   `Tools > NuGet Package Manager > Manage NuGet Packages for Solution...`
-
-   Certifique-se de instalar os pacotes listados neste README.
-
-4. **Crie e aplique as migrations**:
-
-   ```powershell
-   PM> Add-Migration InitialCreate
-   PM> Update-Database
-   ```
-
-5. **Execute a aplicação**:
-
-   No Visual Studio: pressione `F5` ou `Ctrl + F5`.
-
-6. **Acesse o Swagger UI**:
-
-   ```
-   https://localhost:7088/swagger
-   ```
-
----
+5.  **Acessar a Documentação Interativa**
+    * Abra o navegador e acesse o endereço do Swagger UI, por exemplo: `http://localhost:[PORTA]/swagger`.
 
 ## Rotas da API
 
-### Usuários (`UserController`)
+A documentação completa e interativa com exemplos de payload está disponível na página do Swagger.
 
-| Método     | Rota               | Parâmetros / Body                    | Resposta                              |
-|------------|--------------------|--------------------------------------|---------------------------------------|
-| **GET**    | `/api/user`        | —                                    | `200 OK` + lista de `UserResponse`    |
-| **GET**    | `/api/user/{id}`   | PathParam: `id`                      | `200 OK` + `UserResponse` ou `404`    |
-| **POST**   | `/api/user`        | Body JSON: `UserRequest`             | `201 Created` + `UserResponse`        |
-| **PUT**    | `/api/user/{id}`   | PathParam: `id`, Body JSON: `UserRequest` | `200 OK` + `UserResponse`        |
-| **DELETE** | `/api/user/{id}`   | PathParam: `id`                      | `204 No Content`                      |
-| **GET**    | `/api/user/by-role`    | QueryParam: `roleId` (ex: `?roleId=1`) | `200 OK` + lista de `UserResponse`|
----
+#### MotorcycleController
+| Método | Rota | Resposta |
+|---|---|---|
+| GET | /api/motorcycle | 200 OK + lista de `MotorcycleResponse` |
+| GET | /api/motorcycle/{id} | 200 OK + `MotorcycleResponse` ou 404 |
+| POST | /api/motorcycle | 201 Created + `MotorcycleResponse` |
+| PUT | /api/motorcycle/{id} | 204 No Content ou 404 |
+| DELETE | /api/motorcycle/{id} | 204 No Content ou 404 |
 
-### Papéis (`RoleController`)
+#### UserController
+| Método | Rota | Resposta |
+|---|---|---|
+| GET | /api/user | 200 OK + lista de `UserResponse` |
+| GET | /api/user/{id} | 200 OK + `UserResponse` ou 404 |
+| POST | /api/user | 201 Created + `UserResponse` |
+| PUT | /api/user/{id} | 204 No Content ou 404 |
+| DELETE | /api/user/{id} | 204 No Content ou 404 |
 
-| Método     | Rota                   | Parâmetros / Body                    | Resposta                                     |
-|------------|------------------------|--------------------------------------|----------------------------------------------|
-| **GET**    | `/api/role`            | —                                    | `200 OK` + lista de `RoleResponse`           |
-| **GET**    | `/api/role/{id}`       | PathParam: `id`                      | `200 OK` + `RoleResponse` ou `404 Not Found` |
-| **POST**   | `/api/role`            | Body JSON: `RoleRequest`             | `201 Created` + `RoleResponse`               |
-| **PUT**    | `/api/role/{id}`       | PathParam: `id`, Body JSON: `RoleRequest` | `200 OK` + `RoleResponse`              |
-| **DELETE** | `/api/role/{id}`       | PathParam: `id`                      | `204 No Content`                             |
+#### RoleController
+| Método | Rota | Resposta |
+|---|---|---|
+| GET | /api/role | 200 OK + lista de `RoleResponse` |
+| GET | /api/role/{id} | 200 OK + `RoleResponse` ou 404 |
+| POST | /api/role | 201 Created + `RoleResponse` |
+| PUT | /api/role/{id} | 204 No Content ou 404 |
+| DELETE | /api/role/{id} | 204 No Content ou 404 |
 
+### Exemplo de Uso (cURL)
 
-
-## Documentação (Swagger)
-
-A documentação interativa está disponível em:
-
+**Criando uma nova moto:**
+```bash
+curl -X POST "http://localhost:5225/api/Motorcycle" -H "Content-Type: application/json" -d "{\"year\": 2024, \"model\": \"Yamaha Fazer 250\", \"plate\": \"DEF5G67\"}"
 ```
-https://localhost:7088/swagger
+
+## Executando os Testes
+
+O projeto inclui um projeto de testes (`mottu-challenge.Tests`) utilizando xUnit para garantir a qualidade do código.
+
+Para executar todos os testes da solução, navegue até a pasta raiz (`mottu-challenge.net`) e utilize o seguinte comando:
+
+```bash
+dotnet test
 ```
-
-Inclui exemplos de requisição e resposta para todos os endpoints.
-
----
-
-## Observações
-
-* 🔐 **Autenticação**: JWT e autenticação ainda não implementados. Recomenda-se sua inclusão em futuras versões.
-* 🔒 **Segurança de configuração**: Use variáveis de ambiente ou User Secrets para armazenar a `ConnectionString` em produção.
-* 🗃️ **Banco de Dados**: Tabelas `Users` e `Roles` geradas via migrations (EF Core).
-
----
