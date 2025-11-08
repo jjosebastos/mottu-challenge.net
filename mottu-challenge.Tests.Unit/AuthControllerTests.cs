@@ -7,7 +7,6 @@ using mottu_challenge.Controllers;
 using mottu_challenge.Dto.Request;
 using mottu_challenge.Model;
 using mottu_challenge.Repository;
-using mottu_challenge.Service;
 using mottu_challenge.Services;
 using Xunit;
 

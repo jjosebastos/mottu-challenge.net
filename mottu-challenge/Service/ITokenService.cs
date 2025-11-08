@@ -1,6 +1,6 @@
 ﻿using mottu_challenge.Model;
 
-namespace mottu_challenge.Service
+namespace mottu_challenge.Services
 {
     public interface ITokenService
     {

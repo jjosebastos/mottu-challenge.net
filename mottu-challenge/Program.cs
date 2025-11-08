@@ -1,3 +1,6 @@
+
+using Microsoft.Extensions.ML;      
+using mottu_challenge.DataModels;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -7,12 +10,11 @@ using Microsoft.OpenApi.Models;
 using mottu_challenge.Connection;
 using mottu_challenge.Mappers;
 using mottu_challenge.Repository;
-using mottu_challenge.Services;
+using mottu_challenge.Services; 
 using System.Reflection;
-using System.Text; // Para o Swagger
-
+using System.Text; 
 var builder = WebApplication.CreateBuilder(args);
-var Configuration = builder.Configuration; // Para ler o appsettings
+var Configuration = builder.Configuration; 
 
 
 builder.Services.AddControllers();
@@ -68,8 +70,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // --- 3. Serviços de Autenticação (do seu professor) ---
 
 // Adiciona o TokenService
-builder.Services.AddScoped<TokenService>(); // Usar Scoped é melhor que Singleton para serviços
-
+builder.Services.AddScoped<ITokenService, TokenService>(); 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Adiciona Autenticação JWT
@@ -91,6 +92,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
     });
+
+
 
 
 builder.Services.AddApiVersioning(options =>
@@ -124,6 +127,10 @@ builder.Services.AddHealthChecks()
         failureStatus: HealthStatus.Unhealthy, // O que reportar se falhar
         tags: new[] { "database", "ready" }
     );
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddPredictionEnginePool<ModelInput, ModelOutput>()
+    .FromFile("seu_modelo.zip");
 
 var app = builder.Build();
 

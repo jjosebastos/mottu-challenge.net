@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mottu_challenge.Dto.Request;
 using mottu_challenge.Repository;
-using mottu_challenge.Service;
 using mottu_challenge.Services;
-using System.ComponentModel.DataAnnotations; // Usado para o DTO de resposta
+using System.ComponentModel.DataAnnotations; 
 
 namespace mottu_challenge.Controllers
 {
