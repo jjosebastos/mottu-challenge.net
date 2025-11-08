@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mottu_challenge.Connection;
@@ -11,11 +12,13 @@ using mottu_challenge.Model;
 namespace mottu_challenge.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     public class MotorcycleController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+
 
         public MotorcycleController(AppDbContext context, IMapper mapper)
         {

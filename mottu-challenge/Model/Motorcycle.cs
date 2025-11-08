@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace mottu_challenge.Model
 {
+    [Table("T_MTU_MOTO")]
     public class Motorcycle
     {
         [Key]

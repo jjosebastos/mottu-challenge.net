@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -5,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using mottu_challenge.Connection;
 using mottu_challenge.Mappers;
+using mottu_challenge.Repository;
 using mottu_challenge.Services;
 using System.Reflection;
 using System.Text; // Para o Swagger
@@ -12,11 +14,11 @@ using System.Text; // Para o Swagger
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration; // Para ler o appsettings
 
-// Add services to the container.
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// --- 1. Configuração do Swagger para JWT (do seu professor) ---
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -68,6 +70,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Adiciona o TokenService
 builder.Services.AddScoped<TokenService>(); // Usar Scoped é melhor que Singleton para serviços
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 // Adiciona Autenticação JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -87,6 +91,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ClockSkew = TimeSpan.Zero
         };
     });
+
+
+builder.Services.AddApiVersioning(options =>
+{
+    // Reporta as versões suportadas no header da resposta
+    options.ReportApiVersions = true;
+
+    // Assume a versão padrão (1.0) se o cliente não especificar
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+
+    // Método de leitura (vamos usar pela URL, ex: /api/v1/...)
+    options.ApiVersionReader = new UrlSegmentApiVersionReader();
+
+}).AddApiExplorer(options =>
+{
+    // Formato do nome do grupo no Swagger (ex: 'v1')
+    options.GroupNameFormat = "'v'VVV";
+
+    // Substitui {version} na rota pelo número da versão
+    options.SubstituteApiVersionInUrl = true;
+});
 
 // Adiciona Autorização
 builder.Services.AddAuthorization();

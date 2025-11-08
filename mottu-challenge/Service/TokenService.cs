@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using mottu_challenge.Model;
-using mottu_challenge.Dto.Request; // <-- Importar seu modelo User
+// using mottu_challenge.Dto.Request; // <-- Não é mais necessário
 
 namespace mottu_challenge.Services
 {
@@ -12,42 +12,58 @@ namespace mottu_challenge.Services
         private readonly IConfiguration _configuration;
         private readonly ILogger<TokenService> _logger;
 
-
-        public TokenService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration, ILogger<TokenService> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         /// <summary>
         /// Gera um Token JWT incluindo as claims de Role e ID do usuário.
         /// </summary>
-        /// <param name="user">O objeto User completo, vindo do banco (incluindo a Role).</param>
+        /// <param name="user">O objeto User completo, vindo do banco.</param>
+        /// <param name="roleName">O nome do perfil (role) do usuário.</param>
         /// <returns>O token JWT assinado.</returns>
         public string GenerateToken(User user, string roleName)
         {
-            var key = _configuration["Jwt:Key"];
-            var issuer = _configuration["Jwt:Issuer"];
-            var audience = _configuration["Jwt:Audience"];
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new List<Claim>
+            try
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.IdUser.ToString()), 
-                new Claim(JwtRegisteredClaimNames.Name, user.Username), 
-                new Claim(ClaimTypes.Role, roleName), 
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+ 
+                var key = _configuration["Jwt:Key"];
+                var issuer = _configuration["Jwt:Issuer"];
+                var audience = _configuration["Jwt:Audience"];
+                var expiresHours = _configuration.GetValue<double>("Jwt:ExpiresInHours", 2);
 
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.Now.AddHours(2), 
-                signingCredentials: credentials);
+                if (string.IsNullOrEmpty(key))
+                    throw new InvalidOperationException("Chave JWT (Jwt:Key) não encontrada na configuração.");
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
+
+                var claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.IdUser.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Name, user.Username),
+                    new Claim(ClaimTypes.Role, roleName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                };
+
+                var token = new JwtSecurityToken(
+                    issuer: issuer,
+                    audience: audience,
+                    claims: claims,
+                    expires: DateTime.UtcNow.AddHours(expiresHours),
+                    signingCredentials: credentials);
+
+                _logger.LogInformation("Token JWT gerado com sucesso para o usuário ID {UserId}.", user.IdUser);
+
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao gerar o token JWT para o usuário ID {UserId}.", user.IdUser);
+                throw; // Relança a exceção para o controller tratar
+            }
         }
     }
 }

@@ -106,6 +106,7 @@ namespace mottu_challenge.Controllers
             user.Role = roleFound;
             user.FlagAtivo = "S";
             user.CreatedAt = DateTime.UtcNow;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(userRequest.Password);
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
