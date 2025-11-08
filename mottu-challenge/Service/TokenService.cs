@@ -1,34 +1,28 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using mottu_challenge.Model;
+using mottu_challenge.Service;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using mottu_challenge.Model;
-// using mottu_challenge.Dto.Request; // <-- Não é mais necessário
 
 namespace mottu_challenge.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<TokenService> _logger;
 
         public TokenService(IConfiguration configuration, ILogger<TokenService> logger)
         {
+
             _configuration = configuration;
             _logger = logger;
         }
-
-        /// <summary>
-        /// Gera um Token JWT incluindo as claims de Role e ID do usuário.
-        /// </summary>
-        /// <param name="user">O objeto User completo, vindo do banco.</param>
-        /// <param name="roleName">O nome do perfil (role) do usuário.</param>
-        /// <returns>O token JWT assinado.</returns>
         public string GenerateToken(User user, string roleName)
         {
             try
             {
- 
+
                 var key = _configuration["Jwt:Key"];
                 var issuer = _configuration["Jwt:Issuer"];
                 var audience = _configuration["Jwt:Audience"];
@@ -65,5 +59,13 @@ namespace mottu_challenge.Services
                 throw; // Relança a exceção para o controller tratar
             }
         }
+
+        /// <summary>
+        /// Gera um Token JWT incluindo as claims de Role e ID do usuário.
+        /// </summary>
+        /// <param name="user">O objeto User completo, vindo do banco.</param>
+        /// <param name="roleName">O nome do perfil (role) do usuário.</param> 
+        /// <returns>O token JWT assinado.</returns>
+
     }
 }

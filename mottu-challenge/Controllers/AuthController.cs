@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mottu_challenge.Dto.Request;
 using mottu_challenge.Repository;
+using mottu_challenge.Service;
 using mottu_challenge.Services;
 using System.ComponentModel.DataAnnotations; // Usado para o DTO de resposta
 
@@ -17,18 +18,21 @@ namespace mottu_challenge.Controllers
     public class AuthController : Controller
     {
         private readonly IUserRepository _userRepository;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
+    
 
         /// <summary>
         /// Inicializa uma nova instância da <see cref="AuthController"/>.
         /// </summary>
         /// <param name="userRepository">O repositório para acesso aos dados do usuário.</param>
         /// <param name="tokenService">O serviço para geração de tokens JWT.</param>
-        public AuthController(IUserRepository userRepository, TokenService tokenService)
+        public AuthController(IUserRepository userRepository, ITokenService tokenService)
         {
             _userRepository = userRepository;
             _tokenService = tokenService;
         }
+
+      
 
         /// <summary>
         /// Autentica um usuário e retorna um token JWT.
