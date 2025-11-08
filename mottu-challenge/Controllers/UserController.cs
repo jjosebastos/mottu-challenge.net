@@ -145,7 +145,7 @@ namespace mottu_challenge.Controllers
             _mapper.Map(userRequest, userFound);
             await _context.SaveChangesAsync();
             var updatedUser = _mapper.Map<UserResponse>(userFound);
-            return Ok(updatedUser);
+            return NoContent();
         }
 
         /// <summary>

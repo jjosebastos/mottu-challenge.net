@@ -23,7 +23,6 @@ namespace mottu_challenge.Model
         [MinLength(6, ErrorMessage = "Senha precisa ter no mínimo 6 caracteres")]
         public String Password { get; set; }
 
-
         public String FlagAtivo { get; set; }
 
         public DateTime CreatedAt { get; set; }

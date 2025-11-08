@@ -147,7 +147,7 @@ namespace mottu_challenge.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var roleFound = await _context.Roles.FindAsync(id);
-            if (roleFound == null) return BadRequest();
+            if (roleFound == null) return NotFound();
 
             roleFound.FlagAtivo = "N";
             await _context.SaveChangesAsync();

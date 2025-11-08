@@ -1,10 +1,11 @@
-﻿using mottu_challenge.Dto.Shared;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mottu_challenge.Connection;
+using mottu_challenge.Dto;
 using mottu_challenge.Dto.Request;
 using mottu_challenge.Dto.Response;
+using mottu_challenge.Dto.Shared;
 using mottu_challenge.Model;
 
 namespace mottu_challenge.Controllers
@@ -30,9 +31,15 @@ namespace mottu_challenge.Controllers
         /// <returns>Uma lista de motos.</returns>
         /// <response code="200">Retorna a lista de motos com sucesso.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<MotorcycleResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<MotorcycleResponse>>> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        [ProducesResponseType(typeof(PagedResponse<MotorcycleResponse>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResponse<MotorcycleResponse>>> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
+            // 1. Contagem total (precisa ser feita ANTES do Skip/Take)
+            var totalRecords = await _context.Motorcycles
+                .Where(m => m.FlagAtivo == "S")
+                .CountAsync();
+
+            // 2. Busca paginada
             var motorcycles = await _context.Motorcycles
                 .Where(m => m.FlagAtivo == "S")
                 .OrderBy(m => m.Id)
@@ -40,9 +47,32 @@ namespace mottu_challenge.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var motorcycleResponse = _mapper.Map<IEnumerable<MotorcycleResponse>>(motorcycles);
+            var motorcycleResponseList = _mapper.Map<List<MotorcycleResponse>>(motorcycles);
+            foreach (var moto in motorcycleResponseList)
+            {
+                var selfLink = Url.Action(nameof(GetById), "Motorcycle", new { id = moto.Id }, Request.Scheme);
+                moto.Links.Add(new LinkDto(selfLink, "self", "GET"));
+            }
+            var pagedResponse = new PagedResponse<MotorcycleResponse>(motorcycleResponseList, pageNumber, pageSize, totalRecords);
+            pagedResponse.Links.Add(new LinkDto(
+                Url.Action(nameof(Get), "Motorcycle", new { pageNumber, pageSize }, Request.Scheme),
+                "self", "GET"));
 
-            return Ok(motorcycleResponse);
+            // Link para a próxima página (se existir)
+            if (pageNumber < pagedResponse.TotalPages)
+            {
+                pagedResponse.Links.Add(new LinkDto(
+                    Url.Action(nameof(Get), "Motorcycle", new { pageNumber = pageNumber + 1, pageSize }, Request.Scheme),
+                    "next-page", "GET"));
+            }
+            if (pageNumber > 1)
+            {
+                pagedResponse.Links.Add(new LinkDto(
+                    Url.Action(nameof(Get), "Motorcycle", new { pageNumber = pageNumber - 1, pageSize }, Request.Scheme),
+                    "previous-page", "GET"));
+            }
+
+            return Ok(pagedResponse);
         }
 
         /// <summary>
